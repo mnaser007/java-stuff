@@ -353,6 +353,34 @@ public class Trainee {
 			Child child=new Child();
 			return child.getSavings(sal)+"";
 		}
+		
+		//.........Topic instance..............
+		
+		
+		@GET
+		@Path("type")
+		@Produces(MediaType.TEXT_HTML)
+		public String type() {
+			Instance<Float> inst=new Instance<Float>();
+			//inst.x=0.0f;
+			return inst.getType();
+		}
+		
+		
+		@GET
+		@Path("t_array")
+		@Produces(MediaType.TEXT_HTML)
+		public String getArrayValues() {
+			Instance<Float> inst=new Instance<Float>();
+			inst.createArray(56.8f,69.9f,58.4f,36.3f);
+			String s="";
+			for(Float i:inst.readArray())
+				s+=i+",";
+			return s;
+			
+		}
+
 	}
+	
 
 
