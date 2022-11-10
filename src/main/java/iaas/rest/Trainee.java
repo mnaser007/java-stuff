@@ -46,6 +46,7 @@ public class Trainee {
 			
 		}*/
 		
+		
 		@GET
 		@Path("add/{values}")
 		@Produces(MediaType.TEXT_HTML)
@@ -60,7 +61,12 @@ public class Trainee {
 			catch(Exception e) {
 				return e.getMessage();
 			}
-		}
+		
+		
+			VarArgs va=new VarArgs();
+			return va.add("add",vals)+"<br>"+va.avg("avg", vals)+"<br>"+va.perc("percentage", p, vals);
+		
+			}
 		
 		@Produces(MediaType.TEXT_HTML)
 		@GET
@@ -313,7 +319,7 @@ public class Trainee {
 			return (n1+n2)+"";
 		}
 		
-	/*	@GET
+		@GET
 		@Path("inh")
 		@Produces(MediaType.APPLICATION_JSON)
 		public List<Stud> getStud() {
@@ -341,10 +347,10 @@ public class Trainee {
 			
 			//Stud stud[]= {cur,dep};
 			
-			//Stud st=new Stud();
+			Stud st=new Stud();
 			//st.trainer="bheem";
 			return list;
-		}*/
+		}
 		
 		@GET
 		@Path("savings/{sal}")
@@ -355,7 +361,6 @@ public class Trainee {
 		}
 		
 		//.........Topic instance..............
-		
 		
 		@GET
 		@Path("type")
@@ -379,8 +384,93 @@ public class Trainee {
 			return s;
 			
 		}
+		
+		
+		@GET
+		@Path("t_array/{type}/{values}")
+		@Produces(MediaType.TEXT_HTML)
+		public String getArrayValues(@PathParam("type")String type,@PathParam("values")String values) {
+			String vals[]=values.split(",");
+			String s="";
+			if(type.equals("Integer")) {
+				Inst<Integer> inst=new Inst<Integer>();
+				inst.createArray(StringArray.toIntegerArray(vals));
+				for(Integer i:inst.readArray())
+					s+=i+" ";
+			}
+			else if(type.equals("Float")) {
+				Inst<Float> inst=new Inst<Float>();
+				inst.createArray(StringArray.toFloatArray(vals));
+				for(Float i:inst.readArray())
+					s+=i+" ";
+			}
+			else if(type.equals("String")) {
+				Inst<String> inst=new Inst<String>();
+				inst.createArray(vals);
+				for(String i:inst.readArray())
+					s+=i+" ";
+			}
+			return s;
+			
+		}
+		 //Fin1 and Fin2 classes
+		public String finalTest(int x) {
+			Fin1 f1=new Fin1();
+			//f1.x=x;
+			return x+"";
+		}
+		
+		@GET
+		@Path("area/{x}/{name}")
+		@Produces(MediaType.TEXT_HTML)
+		public String accessAbstract(@PathParam("x")float x,@PathParam("name")String name) {
+			Shape circle=new Shape() {	
+				@Override
+				public float area(float x) {
+					// TODO Auto-generated method stub
+					return 3.14f*x*x;
+				}
+			};	 
+			
+			Shape square = new Shape() {	
+				@Override
+				public float area(float x) {
+					// TODO Auto-generated method stub
+					return x*x;
+				}
+			};	
+			String res="circle area:"+circle.area(x)+"<br>square area:"+square.area(x)+"<br>"+circle.drawnBy(name)+"<br>"+square.drawnBy(name);
+			return res;
+		}
+		
 
+		@GET
+		@Path("vehicle")
+		@Produces(MediaType.TEXT_HTML)
+		public String getVehicleData() {
+			PetrolCar car=new PetrolCar();
+			//car.maxSpeed=180;
+			return car.wheelCount()+"<br>"+car.fuelType()+"<br>"+car.color()+"<br>"+car.maxSpeed+"<br>"+car.seatCount();
+		}
+		
+		@GET
+		@Path("shape/{rad}")
+		@Produces(MediaType.TEXT_HTML)
+		public String getShapeArea(@PathParam("rad")float x) {
+			MyShape circle=(radius)->{
+				return 3.14f*radius*radius;
+			};
+			
+			MyShape square=(side)->{
+				return side*side;
+			};
+			
+			return circle.area(x)+"<br>"+square.area(x);
+		}
 	}
+		
+		
+	
 	
 
 

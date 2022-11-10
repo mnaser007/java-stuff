@@ -30,8 +30,25 @@ public class Wrapper {
 				   "<br>"+"Your float vlaue is:"+myint.floatValue()+"";  //float value is not a string conver (float to String)
 		   																//method name start with small letter
 		return res;
-	}								   					
+	}			
+	@GET
+	@Path("wrap2/{float}")
+	@Produces(MediaType.TEXT_HTML)
+	public String wrap1(@PathParam("float") Float x) {     
+		Float myint=new Float (x);	
+		String res="<br>"+"Your Interger value is:"+myint.intValue()+"";
+	return res;
 	}
+	/*@GET
+	@Path("type")
+	@Produces(MediaType.TEXT_HTML)
+	public String type () {
+		Integer <Object>=new Integer<Object>();
+		inst*/
+			
+		}
+	
+
 
 
 
