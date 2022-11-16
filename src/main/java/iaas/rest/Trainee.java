@@ -53,18 +53,19 @@ public class Trainee {
 		public String add(@PathParam("values")String values) {
 			String[] vals=values.split(",");
 			float sum=0.0f;
+			int count = values.length();
 			try {
 				for(int i=0;i<vals.length;i++)
 					sum+=Float.parseFloat(vals[i]);
-				return "<font size=10px>"+sum+"</font>";
+				//return "<font size=10px>"+sum+"</font>";
 			}
 			catch(Exception e) {
 				return e.getMessage();
 			}
 		
-		
-			VarArgs va=new VarArgs();
-			return va.add("add",vals)+"<br>"+va.avg("avg", vals)+"<br>"+va.perc("percentage", p, vals);
+			
+			VarArgs va = new VarArgs();
+			return "Adition is "+va.add("add",vals)+"<br>"+"Average is "+va.avg("avg",count,vals)+"";
 		
 			}
 		
@@ -467,7 +468,98 @@ public class Trainee {
 			
 			return circle.area(x)+"<br>"+square.area(x);
 		}
-	}
+		//..........Enum...............................
+		
+		@SuppressWarnings("finally")
+		@GET
+		@Path("signal/{color}")
+		@Produces(MediaType.TEXT_HTML)
+		public String getSignal(@PathParam("color")String color) {
+			int code=0;
+			String text="";
+			String result="";
+			Signal signal=Signal.valueOf(color.toUpperCase()); //assigning to one signal type like "RED"
+			try {
+				for(int i=0;i<4;i++) {
+					code+=(int)color.toUpperCase().charAt(i);
+				}
+				switch(signal) {
+				case RED:
+					text="<font color='red' size=10px>";
+					break;
+				case YELLOW:
+					text="<font color='yellow' size=10px>";
+					break;
+				case GREEN:
+					text="<font color='green' size=10px>";
+					break;
+				default:
+					text="<font color='green' size=10px>";
+				}
+				result=text+signal.toString()+":"+signal.action+":"+signal.time+":"+code+"</font>";
+				return result;
+			}
+			catch(IllegalArgumentException ex) {
+				result="<font color='"+color+"' size=10px>The given signal color is not valid</font>";
+				return result;
+			}
+			catch(StringIndexOutOfBoundsException ex) {
+				text="<font color='"+color+"' size=10px>";
+				result=text+signal.toString()+":"+signal.action+":"+signal.time+":"+code+"</font>";
+				return result;
+			}
+			catch(Exception ex) {
+				return "";
+			}
+			/*finally {
+				text="<font color='"+color+"' size=10px>";
+				result=text+"thank u"+"</font>";
+				return result;
+			}*/
+			
+		}
+		
+		@GET
+		@Path("all_signals")
+		@Produces(MediaType.TEXT_HTML)
+		public String getAllSignals() {
+			String allSig="";
+			for(Signal sig:Signal.values()) //singal.value type of array  will be default array and from that adding and returning
+				allSig+=sig.toString()+"<br>"; // singal are converting to String
+			return allSig;
+		}
+		
+		@GET
+		@Path("vote/{age}")
+		@Produces(MediaType.TEXT_HTML)
+		public String vote(@PathParam("age")int age) {
+			String votingPage="";
+			try {
+				Vote vote=new Vote();
+				if(vote.canVote(age))
+					votingPage="<form><input type='radio' name='party'>BJP<br><input type='radio' name='party'>TRS<br><input type='radio' name='party'>Congress<br><input type='radio' name='party'>MIM";
+				else
+					throw new LessAgeException("U r not eligible");
+				return votingPage;
+			}
+			catch(LessAgeException e) {
+				votingPage=e.getMessage();
+				return votingPage;
+			}
+			
+		}
+}
+		
+		
+		
+	
+		
+	
+		
+			
+		
+		
+		
 		
 		
 	
