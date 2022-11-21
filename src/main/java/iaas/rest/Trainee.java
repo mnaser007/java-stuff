@@ -2,6 +2,7 @@ package iaas.rest;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.io.*;
 
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;
@@ -460,9 +461,20 @@ public class Trainee {
 
 		return circle.area(x) + "<br>" + square.area(x);
 	}
+	
+	@GET
+	@Path("arithmatic1/{x},{y}")
+	@Produces(MediaType.TEXT_HTML)
+	public String doOperation(@PathParam("x")float x,@PathParam("y")float y) {
+		Arithmatic add=(a,b)->{
+			return a+b; 
+		};
+		String res=add.doOperation(x, y)+"";
+		return res;
+		
+	}
 	// ..........Enum...............................
 
-	@SuppressWarnings("finally")
 	@GET
 	@Path("signal/{color}")
 	@Produces(MediaType.TEXT_HTML)
@@ -534,6 +546,44 @@ public class Trainee {
 			votingPage = e.getMessage();
 			return votingPage;
 		}
-
 	}
-}
+
+		
+		@GET
+		@Path("read_file1/{fname}")
+		@Produces(MediaType.TEXT_HTML)
+		public String readFile(@PathParam("fname")String fname) {
+			try {
+				FileInputStream in=new FileInputStream("C:\\naserworkspace\\rest\\Files\\"+fname);
+				int c=in.read();
+				String s="";
+				while(c!=-1) {
+					if(c==13)
+						s+="<br>";
+					else
+						s+=(char)c;
+					c=in.read();
+				}
+				return s;
+			}
+			catch(Exception e) {
+				return e.getMessage();
+			}
+		}
+		
+		@GET
+		@Path("write_file/{fname}/{data}")
+		@Produces(MediaType.TEXT_HTML)
+		public String writeFile(@PathParam("fname")String fname,@PathParam("data")String data) {
+			try {
+				FileOutputStream out=new FileOutputStream("C:\\naserworkspace\\rest\\Files\\"+fname,true);
+				byte b[]=data.getBytes();
+				out.write(b);
+				out.write(System.lineSeparator().getBytes());
+				return "data saved in file";
+			}
+			catch(Exception e) {
+				return e.getMessage();
+			}
+		}
+	}
