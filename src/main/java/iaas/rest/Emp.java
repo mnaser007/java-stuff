@@ -3,9 +3,9 @@ package iaas.rest;
 
 public class Emp {
 
-		int id;
-		String name;
-		private double sal;
+	public	int id;
+	public	String name;
+	public double sal;
 		
 		Emp(){
 			id=0;
@@ -13,19 +13,19 @@ public class Emp {
 			sal=0;
 		}
 		
-		Emp(int x,String y,int z){
-			id=x;
-			name=y;
-			sal=z;
+	public 	Emp(int id,String name,double sal){
+			this.id=id;
+			this.name=name;
+			this.sal=sal;
 		}
 		
-		public double getSal() {
+	/*	public double getSal() {
 			return sal;
 		}
 		
 		public void setSal(double sal) {
 			this.sal=sal;
-		}
+		}*/
 		public String toString() {
 			return id+"<br>"+name+"<br>"+sal;
 		}
