@@ -24,6 +24,20 @@ public class String_Split {
 	        }
 	        return sum+"";
 	    }
+		
+		
+		// getting last character of a word
+		@Path("last_char_words/{text}")
+	    @GET	   
+	    @Produces(MediaType.TEXT_HTML)
+	    public String lastCharOfWords(@PathParam("text")String text) {
+	        String ar[]=text.split(",");
+	        String res = "";
+	        for(String s1:ar) {
+	            res+=s1.charAt(s1.length()-1);                     
 	}
+			return res;
+		}
+}
 
 

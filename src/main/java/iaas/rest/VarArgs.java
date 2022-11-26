@@ -9,7 +9,7 @@ public class VarArgs {
 		return sum;
 	}
 	
-	public float addflaot(String... y) {
+	public float addfloat(String... y) {
 		float sum1=0;
 		for (String m:y) // for every int n in x
 			sum1+=Float.parseFloat(m);

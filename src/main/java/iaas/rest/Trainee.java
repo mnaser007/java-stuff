@@ -8,6 +8,7 @@ import java.util.LinkedHashMap;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Scanner;
 import java.util.Set;
 import java.util.TreeSet;
 import java.io.*;
@@ -783,6 +784,33 @@ public class Trainee {
 			s+=entry.getKey()+":"+entry.getValue()+"<br>";
 			return s;
 		}
+		@GET
+		@Path("last_char_words/{text}")
+		@Produces(MediaType.TEXT_HTML)
+		public String lastCharOfWords(@PathParam("text")String text) {
+			String ar[]=text.split(" ");
+			String res="";
+			for(String s:ar)
+				res+=s.charAt(s.length()-1);
+			return res;
+		}
+		
+		@GET
+		@Path("scan_file/{fileName}")
+		@Produces(MediaType.TEXT_HTML)
+		public String readFileScan(@PathParam("fileName")String fileName) {
+			List<String> lines=new ArrayList<>();
+			try {
+				Scanner sc=new Scanner(new File("C:\\ashwin\\classes\\java_iam_b3\\rest\\files\\"+fileName));
+				while(sc.hasNextLine())
+					lines.add(sc.nextLine());
+				return lines.toString();
+			}
+			catch(Exception e) {
+				return e.getMessage();
+			}
+			
+		}
 			
 			
 			// database checking
@@ -792,7 +820,7 @@ public class Trainee {
 		    public String connectToDatabase() {
 		        try {
 		            Class.forName("com.mysql.jdbc.Driver");
-		            Connection c=DriverManager.getConnection("jdbc:mysql://localhost:3306/rest_db", "root", "root");
+		            Connection c=mysql.Connect();
 		            return "connected";
 		        } catch (Exception e) {
 		            // TODO Auto-generated catch block

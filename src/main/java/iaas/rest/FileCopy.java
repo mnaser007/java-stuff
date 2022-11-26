@@ -6,6 +6,7 @@ import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 import java.io.*;
+import java.util.Scanner;
 
 
 
@@ -32,5 +33,22 @@ public class FileCopy {
 			catch (Exception e) {
 				return e.getMessage();
 			}
+	}
+			
+			// ...........reading a  files ..................
+			@GET
+			@Path("scan_file/{fileName}")
+			@Produces(MediaType.TEXT_HTML)
+			public String readFile(@PathParam("fileName")String  fileName) {
+				String op="";			
+				try {
+					Scanner sc=new Scanner(new File("C:\\naserworkspace\\rest\\Files-1\\"+fileName));
+					while (sc.hasNextLine())
+						op+=sc.nextLine();
+					return op;			
+				}
+				catch (Exception e) {
+					return e.getMessage();
+				}	
 			}
 			}
