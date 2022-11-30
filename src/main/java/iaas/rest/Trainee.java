@@ -940,12 +940,30 @@ public class Trainee {
 	@GET
 	@Path("bday")
 	@Produces(MediaType.TEXT_HTML)
-	public String bdayWish(@Context HttpServletRequest rq) {
+	public String bdayWish(@Context HttpServletRequest rq,@Context HttpServletRequest city) {
 		String name=rq.getParameter("username");
-		return "Happy Birthday to: "+name;
+		String name1=city.getParameter("city");
+		return "Happy Birthday to: "+name+"<br>"+"and you born in :"+name1;
 	}
 	
+	// Open the link after submitting the button....
 	
 	
+	@GET
+	@Path("website")
+	@Produces(MediaType.TEXT_HTML)
+		public String website(@Context HttpServletRequest fb,@Context HttpServletRequest gb,@Context HttpServletRequest lk) {
+		
+		String web=fb.getParameter("Facebook");	
+		String web1=gb.getParameter("Google");
+		String web2=lk.getParameter("Linkedin");
+		String s="<a href=\"https://www.facebook.com/\">Facebook</a";
+		String s1="<a href=\"https://www.google.com/\">Google</a";
+		String s2="<a href=\"https://in.linkedin.com/\">Linkedin</a";
+		String res="Links to Access:"+s+"<br>"+s1+"<br>"+s2;
+		return res;
+
+		}	
 }
+
 
