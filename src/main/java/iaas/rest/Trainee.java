@@ -1,26 +1,31 @@
 package iaas.rest;
 
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
+import java.sql.Connection;
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Calendar;
 import java.util.Collections;
-import java.util.HashSet;
-import java.util.LinkedHashMap;
 import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Scanner;
 import java.util.Set;
+import java.util.StringTokenizer;
+import java.util.TimeZone;
 import java.util.TreeSet;
-import java.io.*;
-import java.sql.Connection;
-import java.sql.DriverManager;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
+import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
-
 
 @Path("Trainee")
 public class Trainee {
@@ -109,16 +114,15 @@ public class Trainee {
 		return e1.toString();
 	}
 
-	/*@Produces(MediaType.TEXT_HTML)
-	@GET
-	@Path("emp/{sal}")
-	public String getSal(@PathParam("sal") String sal) {
-		Emp e1 = new Emp();
-		//e1.sal(Double.parseDouble(sal));
-		e1.sal=sal;
-		return e1.sal+"<br>";
-	}
-*/
+	/*
+	 * @Produces(MediaType.TEXT_HTML)
+	 * 
+	 * @GET
+	 * 
+	 * @Path("emp/{sal}") public String getSal(@PathParam("sal") String sal) { Emp
+	 * e1 = new Emp(); //e1.sal(Double.parseDouble(sal)); e1.sal=sal; return
+	 * e1.sal+"<br>"; }
+	 */
 	@Produces(MediaType.TEXT_HTML)
 	@GET
 	@Path("array")
@@ -474,18 +478,18 @@ public class Trainee {
 
 		return circle.area(x) + "<br>" + square.area(x);
 	}
-	
-	//..............Arithmatic Operations in Inteerface...............
+
+	// ..............Arithmatic Operations in Inteerface...............
 	@GET
 	@Path("arithmatic1/{x},{y}")
 	@Produces(MediaType.TEXT_HTML)
-	public String doOperation(@PathParam("x")float x,@PathParam("y")float y) {
-		Arithmatic add=(a,b)->{
-			return a+b; 
+	public String doOperation(@PathParam("x") float x, @PathParam("y") float y) {
+		Arithmatic add = (a, b) -> {
+			return a + b;
 		};
-		String res=add.doOperation(x, y)+"";
+		String res = add.doOperation(x, y) + "";
 		return res;
-		
+
 	}
 	// ..........Enum...............................
 
@@ -562,271 +566,386 @@ public class Trainee {
 		}
 	}
 
-		//..............FileInputStream..............
-		@GET
-		@Path("read_file1/{fname}")
-		@Produces(MediaType.TEXT_HTML)
-		public String readFile(@PathParam("fname")String fname) {
-			try {
-				FileInputStream in=new FileInputStream("C:\\naserworkspace\\rest\\Files\\"+fname);
-				int c=in.read();
-				String s="";
-				while(c!=-1) {
-					if(c==13)
-						s+="<br>";
-					else
-						s+=(char)c;
-					c=in.read();
-				}
-				return s;
+	// ..............FileInputStream..............
+	@GET
+	@Path("read_file1/{fname}")
+	@Produces(MediaType.TEXT_HTML)
+	public String readFile(@PathParam("fname") String fname) {
+		try {
+			FileInputStream in = new FileInputStream("C:\\naserworkspace\\rest\\Files\\" + fname);
+			int c = in.read();
+			String s = "";
+			while (c != -1) {
+				if (c == 13)
+					s += "<br>";
+				else
+					s += (char) c;
+				c = in.read();
 			}
-			catch(Exception e) {
-				return e.getMessage();
-			}
+			return s;
+		} catch (Exception e) {
+			return e.getMessage();
 		}
-		
-		//............FileOutputStream...................
-		@GET
-		@Path("write_file/{fname}/{data}")
-		@Produces(MediaType.TEXT_HTML)
-		public String writeFile(@PathParam("fname")String fname,@PathParam("data")String data) {
-			try {
-				FileOutputStream out=new FileOutputStream("C:\\naserworkspace\\rest\\Files\\"+fname,true);
-				byte b[]=data.getBytes();
-				out.write(b);
-				out.write(System.lineSeparator().getBytes());
-				return "data saved in file";
-			}
-			catch(Exception e) {
-				return e.getMessage();
-			}
-		}
-		
-		// ..............LIST like integer ......................
-		@GET
-		@Path("list/{values}")
-		@Produces(MediaType.TEXT_HTML)
-		public String getlist(@PathParam("values")String values) {
-			String ar[]=values.split(",");
-			Integer ia[]=new Integer[ar.length];
-			int i=0;
-			for (String val:ar)
-				ia[i++]=new Integer(val); //i is increased by 1 after every the execution
-			ListEx ex=new ListEx();
-			List<Integer> list=ex.addValues(ia);// converting arrays to list
-			String res="";
-			for (Integer val:list)
-				res+=val+"<br>";
-			return res;			
-		}
-		@GET
-		@Path("list")
-		@Produces(MediaType.TEXT_HTML)
-		public String getList() {
-			List<Integer> list=new ArrayList<>();
-			list.add(10);
-			list.add(20);
-			list.add(-30);
-			list.add(40);
-			list.remove(1);
-			list.add(2,50);//adding in between
-			List<Integer> list2=new ArrayList<>();
-			list2.add(100);
-			list2.add(70);
-			list2.add(90);
-			list2.add(30);
-			list.addAll(list2);
-			list.removeAll(list2);
-			list.set(2, 85);
-			Collections.sort(list);// in ascending order it will sort
-			Collections.reverse(list);// it will come last to first
-			int x=list.get(2); // getting a value from given index
-			String res="";
-			for (Integer i:list)
-				res+=i+"<br>";
-			res+="------<br>";
-			res+=x+"<br>";
-			// int i=list.indexOf(-30); // to check 30 is in which position
-			int i=list.indexOf(100);// if the value is no there will check in 
-			res+=i+"<br>";
-			boolean b=list.contains(40); // if its is there it will give true or false
-			res+=b+"<br>";
-			return res;
-		}
-		
-		// List of objects link students,employees
-		@GET
-		@Path("emps_list")
-		@Produces(MediaType.APPLICATION_JSON)// returning objects so use JSON Format
-		public List<Emp> listOfEmps() {
-			int ids[]= {101,102,103};
-			String names[]= {"vishal","vijay","kiran"};
-			int sals[]= {23450,24500,35900};
-			List<Emp> emps=new ArrayList<>();
-			for (int i=0;i<3; i++) {
-				Emp e=new Emp(ids[i], names[i], sals[i]);
-				emps.add(e);
-			}					
-		/*Emp e1=new Emp(100,"vishal", 23450);
-		Emp e2=new Emp(101,"manish", 24500);
-		Emp e3=new Emp(102,"naser", 25900);
+	}
 
-		emps.add(e1);
-		emps.add(e2);
-		emps.add(e3);*/
-		
-		return emps;	
+	// ............FileOutputStream...................
+	@GET
+	@Path("write_file/{fname}/{data}")
+	@Produces(MediaType.TEXT_HTML)
+	public String writeFile(@PathParam("fname") String fname, @PathParam("data") String data) {
+		try {
+			FileOutputStream out = new FileOutputStream("C:\\naserworkspace\\rest\\Files\\" + fname, true);
+			byte b[] = data.getBytes();
+			out.write(b);
+			out.write(System.lineSeparator().getBytes());
+			return "data saved in file";
+		} catch (Exception e) {
+			return e.getMessage();
 		}
-		
-		@GET
-		@Path("item_list")
-		@Produces(MediaType.APPLICATION_XML)
-		public List<Item> getItems() {
-			Item i1=new Item (10,"briyani",250);
-			Item i2=new Item (11,"roti",25);
-			Item i3=new Item (12,"curry",150);
-			List<Item> items=new ArrayList<>();
-			items.add(i1);
-			items.add(i2);
-			items.add(i3);
-			Collections.sort(items);
-			return items;
-			
+	}
+
+	// ..............LIST like integer ......................
+	@GET
+	@Path("list/{values}")
+	@Produces(MediaType.TEXT_HTML)
+	public String getlist(@PathParam("values") String values) {
+		String ar[] = values.split(",");
+		Integer ia[] = new Integer[ar.length];
+		int i = 0;
+		for (String val : ar)
+			ia[i++] = new Integer(val); // i is increased by 1 after every the execution
+		ListEx ex = new ListEx();
+		List<Integer> list = ex.addValues(ia);// converting arrays to list
+		String res = "";
+		for (Integer val : list)
+			res += val + "<br>";
+		return res;
+	}
+
+	@GET
+	@Path("list")
+	@Produces(MediaType.TEXT_HTML)
+	public String getList() {
+		List<Integer> list = new ArrayList<>();
+		list.add(10);
+		list.add(20);
+		list.add(-30);
+		list.add(40);
+		list.remove(1);
+		list.add(2, 50);// adding in between
+		List<Integer> list2 = new ArrayList<>();
+		list2.add(100);
+		list2.add(70);
+		list2.add(90);
+		list2.add(30);
+		list.addAll(list2);
+		list.removeAll(list2);
+		list.set(2, 85);
+		Collections.sort(list);// in ascending order it will sort
+		Collections.reverse(list);// it will come last to first
+		int x = list.get(2); // getting a value from given index
+		String res = "";
+		for (Integer i : list)
+			res += i + "<br>";
+		res += "------<br>";
+		res += x + "<br>";
+		// int i=list.indexOf(-30); // to check 30 is in which position
+		int i = list.indexOf(100);// if the value is no there will check in
+		res += i + "<br>";
+		boolean b = list.contains(40); // if its is there it will give true or false
+		res += b + "<br>";
+		return res;
+	}
+
+	// List of objects link students,employees
+	@GET
+	@Path("emps_list")
+	@Produces(MediaType.APPLICATION_JSON) // returning objects so use JSON Format
+	public List<Emp> listOfEmps() {
+		int ids[] = { 101, 102, 103 };
+		String names[] = { "vishal", "vijay", "kiran" };
+		int sals[] = { 23450, 24500, 35900 };
+		List<Emp> emps = new ArrayList<>();
+		for (int i = 0; i < 3; i++) {
+			Emp e = new Emp(ids[i], names[i], sals[i]);
+			emps.add(e);
 		}
-		
-		@GET
-		@Path("set_city")
-		@Produces(MediaType.TEXT_HTML)
-		public String getSet() {
-	//	Set<String> set =new HashSet<>(); 
-	//	Set<String> set =new LinkedHashSet<>(); // if change hashet to Linkedhashet then it will come in same order
-		Set<String> set =new TreeSet<>();	// if we give in treeset then it will come in random or ascii value								
-		String ar1[]= {"hyd","blore","pune","mumbai","chennai","blore","pune"} ;
-				for (String city:ar1) {
-					set.add(city);				
-				}
-				set.remove("mumbai"); // it will remove one item
-				List<String> list=new ArrayList<>();
-				for (String city:set)
-					list.add(city);
-				Collections.reverse(list);
-				String s="";
-				for (String city:set)
-					s+=city+"<br>";
-				return s;
-				}
-		
-		@GET
-		@Path("map")
-		@Produces(MediaType.TEXT_HTML)
-		public String getMap() {
-			Map<Integer,String> map=new HashMap<>();
-			String names[]= {"arathi","aamani","naser","irfan","vinayak","akash"};
-			for (int i=101;i<=100+names.length;i++)
-				map.put(i, names[i-101]);
-			String s="";
-			for(Map.Entry<Integer, String> entry:map.entrySet()) //inside the interface we have a class inside a map
-				if(entry.getKey()==104)
-				s+=entry.getKey()+","+entry.getValue()+"<br>"; //entryset have one by one entry
-			//s+=map.get(103);
-			return s;
+		/*
+		 * Emp e1=new Emp(100,"vishal", 23450); Emp e2=new Emp(101,"manish", 24500); Emp
+		 * e3=new Emp(102,"naser", 25900);
+		 * 
+		 * emps.add(e1); emps.add(e2); emps.add(e3);
+		 */
+
+		return emps;
+	}
+
+	@GET
+	@Path("item_list")
+	@Produces(MediaType.APPLICATION_XML)
+	public List<Item> getItems() {
+		Item i1 = new Item(10, "briyani", 250);
+		Item i2 = new Item(11, "roti", 25);
+		Item i3 = new Item(12, "curry", 150);
+		List<Item> items = new ArrayList<>();
+		items.add(i1);
+		items.add(i2);
+		items.add(i3);
+		Collections.sort(items);
+		return items;
+
+	}
+
+	@GET
+	@Path("set_city")
+	@Produces(MediaType.TEXT_HTML)
+	public String getSet() {
+		// Set<String> set =new HashSet<>();
+		// Set<String> set =new LinkedHashSet<>(); // if change hashet to Linkedhashet
+		// then it will come in same order
+		Set<String> set = new TreeSet<>(); // if we give in treeset then it will come in random or ascii value
+		String ar1[] = { "hyd", "blore", "pune", "mumbai", "chennai", "blore", "pune" };
+		for (String city : ar1) {
+			set.add(city);
 		}
-		
-		@GET
-		@Path("map_marks")
-		@Produces(MediaType.TEXT_HTML)
-		public String getMarks() {
-			Map<Integer,List<Integer>> map=new HashMap<>();
-			List<Integer> list1=Arrays.asList(67,78,98);
-			List<Integer> list2=Arrays.asList(77,89,88);
-			List<Integer> list3=Arrays.asList(67,79,98);
-			map.put(101, list1);
-			map.put(102, list2);
-			map.put(103, list3);
-			String s="";
-			 for(Map.Entry<Integer, List<Integer>> entry:map.entrySet())
-		            s+=entry.getKey()+":"+entry.getValue()+"<br>";
-			return s;
+		set.remove("mumbai"); // it will remove one item
+		List<String> list = new ArrayList<>();
+		for (String city : set)
+			list.add(city);
+		Collections.reverse(list);
+		String s = "";
+		for (String city : set)
+			s += city + "<br>";
+		return s;
+	}
+
+	@GET
+	@Path("map")
+	@Produces(MediaType.TEXT_HTML)
+	public String getMap() {
+		Map<Integer, String> map = new HashMap<>();
+		String names[] = { "arathi", "aamani", "naser", "irfan", "vinayak", "akash" };
+		for (int i = 101; i <= 100 + names.length; i++)
+			map.put(i, names[i - 101]);
+		String s = "";
+		for (Map.Entry<Integer, String> entry : map.entrySet()) // inside the interface we have a class inside a map
+			if (entry.getKey() == 104)
+				s += entry.getKey() + "," + entry.getValue() + "<br>"; // entryset have one by one entry
+		// s+=map.get(103);
+		return s;
+	}
+
+	@GET
+	@Path("map_marks")
+	@Produces(MediaType.TEXT_HTML)
+	public String getMarks() {
+		Map<Integer, List<Integer>> map = new HashMap<>();
+		List<Integer> list1 = Arrays.asList(67, 78, 98);
+		List<Integer> list2 = Arrays.asList(77, 89, 88);
+		List<Integer> list3 = Arrays.asList(67, 79, 98);
+		map.put(101, list1);
+		map.put(102, list2);
+		map.put(103, list3);
+		String s = "";
+		for (Map.Entry<Integer, List<Integer>> entry : map.entrySet())
+			s += entry.getKey() + ":" + entry.getValue() + "<br>";
+		return s;
+	}
+
+	@GET
+	@Path("map_family")
+	@Produces(MediaType.TEXT_HTML)
+	public String familyMap() {
+		Map<String, Map<String, Object>> family = new LinkedHashMap<>();
+		Map<String, Object> head = new LinkedHashMap<>();
+		Map<String, Object> mem1 = new LinkedHashMap<>();
+		Map<String, Object> mem2 = new LinkedHashMap<>();
+		Map<String, Object> mem3 = new LinkedHashMap<>();
+		head.put("name", "Abdul Rahaman");
+		head.put("age", 65);
+		head.put("rel", "self");
+
+		mem1.put("name", "kousar");
+		mem1.put("age", 40);
+		mem1.put("rel", "wife");
+
+		mem2.put("name", "naser");
+		mem2.put("age", 24);
+		mem2.put("rel", "son");
+
+		mem3.put("name", "amer");
+		mem3.put("age", 30);
+		mem3.put("rel", "son2");
+
+		family.put("head", head);
+		family.put("mem1", mem1);
+		family.put("mem2", mem2);
+		family.put("mem3", mem3);
+
+		String s = "";
+		for (Map.Entry<String, Map<String, Object>> entry : family.entrySet())
+			s += entry.getKey() + ":" + entry.getValue() + "<br>";
+		return s;
+	}
+
+	@GET
+	@Path("last_char_words/{text}")
+	@Produces(MediaType.TEXT_HTML)
+	public String lastCharOfWords(@PathParam("text") String text) {
+		String ar[] = text.split(" ");
+		String res = "";
+		for (String s : ar)
+			res += s.charAt(s.length() - 1);
+		return res;
+	}
+
+	@GET
+	@Path("scan_file/{fileName}")
+	@Produces(MediaType.TEXT_HTML)
+	public String readFileScan(@PathParam("fileName") String fileName) {
+		List<String> lines = new ArrayList<>();
+		try {
+			Scanner sc = new Scanner(new File("C:\\ashwin\\classes\\java_iam_b3\\rest\\files\\" + fileName));
+			while (sc.hasNextLine())
+				lines.add(sc.nextLine());
+			return lines.toString();
+		} catch (Exception e) {
+			return e.getMessage();
 		}
 
-		@GET
-		@Path("map_family")
-		@Produces(MediaType.TEXT_HTML)
-		public String familyMap() {
-			Map<String,Map<String,Object>> family=new LinkedHashMap<>();
-			Map<String,Object> head=new LinkedHashMap<>();
-			Map<String,Object> mem1=new LinkedHashMap<>();
-			Map<String,Object> mem2=new LinkedHashMap<>();
-			Map<String,Object> mem3=new LinkedHashMap<>();
-			head.put("name", "Abdul Rahaman");
-			head.put("age", 65);
-			head.put("rel", "self");
-			
-			mem1.put("name", "kousar");
-			mem1.put("age", 40);
-			mem1.put("rel", "wife");
-			
-			mem2.put("name", "naser");
-			mem2.put("age", 24);
-			mem2.put("rel", "son");
-			
-			mem3.put("name", "amer");
-			mem3.put("age", 30);
-			mem3.put("rel", "son2");
-					
-			family.put("head", head);
-			family.put("mem1", mem1);
-			family.put("mem2", mem2);
-			family.put("mem3", mem3);
-			
-			String s="";
-			for(Map.Entry<String, Map<String,Object>> entry:family.entrySet())
-			s+=entry.getKey()+":"+entry.getValue()+"<br>";
-			return s;
+	}
+
+	// .............database checking..................
+
+	@GET
+	@Path("connect_server")
+	@Produces(MediaType.TEXT_HTML)
+	public String connectToDatabase() {
+		try {
+			Class.forName("com.mysql.jdbc.Driver");
+			Connection c = Connect_db.Connect();
+			return "connected";
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			return e.getMessage();
 		}
-		@GET
-		@Path("last_char_words/{text}")
-		@Produces(MediaType.TEXT_HTML)
-		public String lastCharOfWords(@PathParam("text")String text) {
-			String ar[]=text.split(" ");
-			String res="";
-			for(String s:ar)
-				res+=s.charAt(s.length()-1);
-			return res;
+	}
+
+	
+	
+	@GET
+	@Path("insert/{id},{name},{sal},{dep},{mgr}")
+	@Produces(MediaType.TEXT_HTML)
+	public String insert(@PathParam("id") int id, @PathParam("name") String name, @PathParam("sal") int sal,
+			@PathParam("dep") int dep, @PathParam("mgr") int mgr) throws SQLException {
+		Connect_db db = new Connect_db();
+		if (db.c == null)
+			return "not connected";
+		else {
+			db.insert(id, name, sal, dep, mgr);
+			return "data saved";
 		}
+		/**/
+	}
+
+	@GET
+	@Path("read_all_emps")
+	@Produces(MediaType.APPLICATION_JSON)
+	public List<Emps> getAllEmps() {
+		Connect_db db = new Connect_db();
+		return db.readAllEmps();
+	}
+
+	@GET
+	@Path("student_db")
+	@Produces(MediaType.TEXT_HTML)
+	public String getAllStudents() {
+		Connect_db db = new Connect_db();
+		return db.readAllStudentsList();
+	}
+	
+	
+	//......Inner classes........
+	
+	@GET
+	@Path("inner_class")
+	@Produces(MediaType.TEXT_HTML)
+	public String getInnerVar() {
+		Outer out= new Outer();
+		Outer.Inner in=out.new Inner(); // this is for Non-static inner class
 		
-		@GET
-		@Path("scan_file/{fileName}")
-		@Produces(MediaType.TEXT_HTML)
-		public String readFileScan(@PathParam("fileName")String fileName) {
-			List<String> lines=new ArrayList<>();
-			try {
-				Scanner sc=new Scanner(new File("C:\\ashwin\\classes\\java_iam_b3\\rest\\files\\"+fileName));
-				while(sc.hasNextLine())
-					lines.add(sc.nextLine());
-				return lines.toString();
-			}
-			catch(Exception e) {
-				return e.getMessage();
-			}
-			
-		}
-			
-			
-			// database checking
-			@GET
-		    @Path("connect_db")
-		    @Produces(MediaType.TEXT_HTML)
-		    public String connectToDatabase() {
-		        try {
-		            Class.forName("com.mysql.jdbc.Driver");
-		            Connection c=mysql.Connect();
-		            return "connected";
-		        } catch (Exception e) {
-		            // TODO Auto-generated catch block
-		            return e.getMessage();
-		        }
-		    }
+		Iouter.Inner iin=new Iouter.Inner(); //inner class in interface is by efault static
+		Outer.Inner2 in2=new Outer.Inner2();
+		return in.x+"<br>"+in2.n+"<br>"+out.getInt()+"<br>"+iin.x;
+	}
+	//.......Calendar..........
+	
+	@GET
+	@Path("date")
+	@Produces(MediaType.TEXT_HTML)
+	public String getCurrentDate() {		
+		CalEx ex= new CalEx();
+		return ex.getDate();
+	}
+	
+	//....checking different TimeZones......
+	
+	
+	@GET
+	@Path("zone")
+	@Produces(MediaType.TEXT_HTML)
+	public String getZones() {
+		String tz[]=TimeZone.getAvailableIDs();
+		String zones=";";
+		for(String zone:tz)
+		zones+=zone+"<br>";
+		return zones;
+		
+	}
+	// Getting area of time of the zone
+	
+	
+	@GET
+	@Path("zone_time/{zone}/{sub}")
+	@Produces(MediaType.TEXT_HTML)
+	public String getTime(@PathParam ("zone")String zone,@PathParam("sub")String sub){
+		//TimeZone tz=TimeZone.getTimeZone("America/Mexico_City");
+		TimeZone tz=TimeZone.getTimeZone(zone+"/"+sub);
+		TimeZone.setDefault(tz);
+		Calendar cal=Calendar.getInstance(tz);
+		return cal.getTime().toString();
+		
+		
+
+	}
+	
+	// .......String Tokenizer...... it will wherever we have .@ charecter wise
+	
+	
+	@GET
+	@Path("tokens/{string}/{delim}")
+	@Produces(MediaType.TEXT_HTML)
+	public String tokens(@PathParam ("string")String s,@PathParam ("delim")String delim) {
+		StringTokenizer tok=new StringTokenizer(s,delim);
+		String toks="";
+		int n=tok.countTokens();
+		while(tok.hasMoreTokens())
+				toks+=tok.nextToken()+"--tokens: "+tok.countTokens()+"<br>";
+		return "total number of tokens:"+n+"<br>"+toks;
+	}	
+	
+	//HTML PAGE SETUP.....
+	
+	
+	@GET
+	@Path("bday")
+	@Produces(MediaType.TEXT_HTML)
+	public String bdayWish(@Context HttpServletRequest rq) {
+		String name=rq.getParameter("username");
+		return "Happy Birthday to: "+name;
+	}
+	
+	
+	
 }
-
 

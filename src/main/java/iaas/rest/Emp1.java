@@ -7,6 +7,11 @@ public class Emp1 extends Emp {
 			return 12*getSal();
 		}
 
+		private int getSal() {
+			// TODO Auto-generated method stub
+			return 0;
+		}
+
 	}
 
 

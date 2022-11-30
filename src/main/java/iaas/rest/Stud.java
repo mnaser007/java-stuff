@@ -2,6 +2,7 @@ package iaas.rest;
 
 
 public class Stud {
+	
 	public int id;
 	public String name;
 	public String course;
@@ -9,10 +10,26 @@ public class Stud {
 	public static String college;
 	
 	
+
+	public Stud(int id, String name, String course, int age, String college) {
 	
-	public String toString() {
-		return id+","+name+","+course+","+age+","+college;
+		super();
+		this.id = id;
+		this.name = name;
+		this.course = course;
+		this.age = age;
 	}
+
+
+
+	@Override
+	public String toString() {
+		return "Stud [id=" + id + ", name=" + name + ", course=" + course + ", age=" + age + "]";
+	}
+
+	
+	
+	
 }
 
 	
