@@ -81,6 +81,7 @@ public class Trainee {
 
 	}
 
+	// ........CONSTRUCTOR........
 	@Produces(MediaType.TEXT_HTML)
 	@GET
 	@Path("studs")
@@ -99,7 +100,6 @@ public class Trainee {
 		s2.age = 23;
 
 		Stud.college = "IAAS";
-
 		return s1 + "<br>" + s2;
 	}
 
@@ -831,8 +831,6 @@ public class Trainee {
 		}
 	}
 
-	
-	
 	@GET
 	@Path("insert/{id},{name},{sal},{dep},{mgr}")
 	@Produces(MediaType.TEXT_HTML)
@@ -863,107 +861,160 @@ public class Trainee {
 		Connect_db db = new Connect_db();
 		return db.readAllStudentsList();
 	}
-	
-	
-	//......Inner classes........
-	
+
+	// ......Inner classes........
+
 	@GET
 	@Path("inner_class")
 	@Produces(MediaType.TEXT_HTML)
 	public String getInnerVar() {
-		Outer out= new Outer();
-		Outer.Inner in=out.new Inner(); // this is for Non-static inner class
-		
-		Iouter.Inner iin=new Iouter.Inner(); //inner class in interface is by efault static
-		Outer.Inner2 in2=new Outer.Inner2();
-		return in.x+"<br>"+in2.n+"<br>"+out.getInt()+"<br>"+iin.x;
+		Outer out = new Outer();
+		Outer.Inner in = out.new Inner(); // this is for Non-static inner class
+
+		Iouter.Inner iin = new Iouter.Inner(); // inner class in interface is by default static
+		Outer.Inner2 in2 = new Outer.Inner2();
+		return in.x + "<br>" + in2.n + "<br>" + out.getInt() + "<br>" + iin.x;
 	}
-	//.......Calendar..........
-	
+	// .......Calendar..........
+
 	@GET
 	@Path("date")
 	@Produces(MediaType.TEXT_HTML)
-	public String getCurrentDate() {		
-		CalEx ex= new CalEx();
+	public String getCurrentDate() {
+		CalEx ex = new CalEx();
 		return ex.getDate();
 	}
-	
-	//....checking different TimeZones......
-	
-	
+
+	// ....checking different TimeZones......
+
 	@GET
 	@Path("zone")
 	@Produces(MediaType.TEXT_HTML)
 	public String getZones() {
-		String tz[]=TimeZone.getAvailableIDs();
-		String zones=";";
-		for(String zone:tz)
-		zones+=zone+"<br>";
+		String tz[] = TimeZone.getAvailableIDs();
+		String zones = ";";
+		for (String zone : tz)
+			zones += zone + "<br>";
 		return zones;
-		
+
 	}
 	// Getting area of time of the zone
-	
-	
+
 	@GET
 	@Path("zone_time/{zone}/{sub}")
 	@Produces(MediaType.TEXT_HTML)
-	public String getTime(@PathParam ("zone")String zone,@PathParam("sub")String sub){
-		//TimeZone tz=TimeZone.getTimeZone("America/Mexico_City");
-		TimeZone tz=TimeZone.getTimeZone(zone+"/"+sub);
+	public String getTime(@PathParam("zone") String zone, @PathParam("sub") String sub) {
+		// TimeZone tz=TimeZone.getTimeZone("America/Mexico_City");
+		TimeZone tz = TimeZone.getTimeZone(zone + "/" + sub);
 		TimeZone.setDefault(tz);
-		Calendar cal=Calendar.getInstance(tz);
+		Calendar cal = Calendar.getInstance(tz);
 		return cal.getTime().toString();
-		
-		
 
 	}
-	
+
 	// .......String Tokenizer...... it will wherever we have .@ charecter wise
-	
-	
+
 	@GET
 	@Path("tokens/{string}/{delim}")
 	@Produces(MediaType.TEXT_HTML)
-	public String tokens(@PathParam ("string")String s,@PathParam ("delim")String delim) {
-		StringTokenizer tok=new StringTokenizer(s,delim);
-		String toks="";
-		int n=tok.countTokens();
-		while(tok.hasMoreTokens())
-				toks+=tok.nextToken()+"--tokens: "+tok.countTokens()+"<br>";
-		return "total number of tokens:"+n+"<br>"+toks;
-	}	
-	
-	//HTML PAGE SETUP.....
-	
-	
+	public String tokens(@PathParam("string") String s, @PathParam("delim") String delim) {
+		StringTokenizer tok = new StringTokenizer(s, delim);
+		String toks = "";
+		int n = tok.countTokens();
+		while (tok.hasMoreTokens())
+			toks += tok.nextToken() + "--tokens: " + tok.countTokens() + "<br>";
+		return "total number of tokens:" + n + "<br>" + toks;
+	}
+
+	// HTML PAGE SETUP.....
+
 	@GET
 	@Path("bday")
 	@Produces(MediaType.TEXT_HTML)
-	public String bdayWish(@Context HttpServletRequest rq,@Context HttpServletRequest city) {
-		String name=rq.getParameter("username");
-		String name1=city.getParameter("city");
-		return "Happy Birthday to: "+name+"<br>"+"and you born in :"+name1;
+	public String bdayWish(@Context HttpServletRequest rq, @Context HttpServletRequest city) {
+		String name = rq.getParameter("username");
+		String name1 = city.getParameter("city");
+		return "Happy Birthday to: " + name + "<br>" + "and you born in :" + name1;
 	}
-	
+
 	// Open the link after submitting the button....
-	
-	
+
 	@GET
 	@Path("website")
 	@Produces(MediaType.TEXT_HTML)
-		public String website(@Context HttpServletRequest fb,@Context HttpServletRequest gb,@Context HttpServletRequest lk) {
-		
-		String web=fb.getParameter("Facebook");	
-		String web1=gb.getParameter("Google");
-		String web2=lk.getParameter("Linkedin");
-		String s="<a href=\"https://www.facebook.com/\">Facebook</a";
-		String s1="<a href=\"https://www.google.com/\">Google</a";
-		String s2="<a href=\"https://in.linkedin.com/\">Linkedin</a";
-		String res="Links to Access:"+s+"<br>"+s1+"<br>"+s2;
+	public String website(@Context HttpServletRequest fb, @Context HttpServletRequest gb,
+			@Context HttpServletRequest lk) {
+
+		String web = fb.getParameter("Facebook");
+		String web1 = gb.getParameter("Google");
+		String web2 = lk.getParameter("Linkedin");
+		String s = "<a href=\"https://www.facebook.com/\">Facebook</a";
+		String s1 = "<a href=\"https://www.google.com/\">Google</a";
+		String s2 = "<a href=\"https://in.linkedin.com/\">Linkedin</a";
+		String res = "Links to Access:" + s + "<br>" + s1 + "<br>" + s2;
 		return res;
 
-		}	
+	}
+
+	// Create a method to get maps having entries where ‘id’ as key in every map and
+	// each other column of the emp table as value. Ex: if id, name, sal, doj are
+	// columns of emp table, then create maps having key-values pairs as id-name,
+	// id-sal, id-doj.
+
+	@GET
+    @Path("/maps")
+
+	public List<Map<String, Object>> getEmployees() {
+
+	 String sql = "SELECT id, name, sal, doj FROM employees";
+ List<Map<String, Object>> result = new ArrayList<>();
+
+
+
+ try (Connection conn = DriverManager.getConnection("jdbc:mysql://localhost:3306/company", "root", "manager");
+
+ Statement stmt = conn.createStatement();
+
+	 ResultSet rs = stmt.executeQuery(sql)) {
+
+	
+
+ while (rs.next()) {
+
+	 Map<String, Object> map = new HashMap<>();
+
+	 int id = rs.getInt("id");
+
+	 String name = rs.getString("name");
+
+	 String sal = rs.getString("sal");
+
+	 Date doj = rs.getDate("doj");
+
+
+
+ map.put("name", name);
+
+ map.put("sal", sal);
+
+	 map.put("doj", doj);
+
+	 result.add(Collections.singletonMap(Integer.toString(id), map));
+
+	            }
+
+	            
+
+	   } catch (SQLException e) {
+
+ e.printStackTrace();
+
+	}
+
+
+
+ return result;
+
+	    }
+
 }
-
-

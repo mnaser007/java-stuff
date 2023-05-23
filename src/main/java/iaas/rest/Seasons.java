@@ -1,10 +1,12 @@
-package iaas.rest;
+/*package iaas.rest;
 
-public enum Seasons { //Season type object or enum type object
-
-				SUMMER,SPRING,WINTER,FALL
+	enum mobile {
+public enum EnumExample { //Season type object or enum type object
+	
+	APPLE,SAMSUNG,HTC;
+				
+				
 		
-		for (Seasons s : Seasons.values());
-			return s;
+	}
 }
-}
+*/

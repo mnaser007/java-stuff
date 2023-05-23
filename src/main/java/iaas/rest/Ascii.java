@@ -22,7 +22,18 @@ public class Ascii {
 			}
 			
 			return s;
-		}
+	
+			}
+			
+		public String stringreverse(@PathParam("str")String s) {
+				String cap=s.toUpperCase();
+				String initial = s, rev="";
+				int length=initial.length();
+				for(int i=length-1;i>=0;i--)	
+				  rev=rev+initial.charAt(i);
+				
+				return rev;
+			}
 	}
 
 

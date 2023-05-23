@@ -6,7 +6,7 @@ public class Emp {
 	public	int id;
 	public	String name;
 	public double sal;
-		
+		//This is constructor
 		Emp(){
 			id=0;
 			name="None";

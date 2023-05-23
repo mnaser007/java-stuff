@@ -11,14 +11,14 @@ public class Stud {
 	
 	
 
-	public Stud(int id, String name, String course, int age, String college) {
+	/*public Stud(int id, String name, String course, int age, String college) {
 	
 		super();
 		this.id = id;
 		this.name = name;
 		this.course = course;
 		this.age = age;
-	}
+	}*/
 
 
 
